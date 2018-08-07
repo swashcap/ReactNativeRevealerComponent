@@ -7,29 +7,48 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Button, ScrollView, StyleSheet, Text, View} from 'react-native';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import Revealer from './Revealer'
 
 type Props = {};
 export default class App extends Component<Props> {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isOpen: false
+    };
+  }
+
   render() {
+    const {isOpen} = this.state;
+
     return (
-      <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        ref={component => this._root = component}
+      >
         <Text style={styles.welcome}>Welcome to React Native!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
+        <View style={styles.buttonWrapper}>
+          <Button
+            onPress={() => this.setState({ isOpen: !this.state.isOpen })}
+            title={isOpen ? 'Close' : 'Open'}
+          />
+        </View>
+        <Revealer open={isOpen}>
+          <Text>Hello!</Text>
+        </Revealer>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  buttonWrapper: {
+    marginVertical: 10
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
