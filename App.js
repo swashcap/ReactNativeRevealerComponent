@@ -7,39 +7,44 @@
  */
 
 import React, {Component} from 'react';
-import {Button, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Button, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 
-import Revealer from './Revealer'
+import Collapse from './Collapse'
 
 type Props = {};
-export default class App extends Component<Props> {
-  constructor(props) {
+type State = {
+  collapsed: boolean
+};
+
+export default class App extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
-      isOpen: false
+      collapsed: true
     };
   }
 
   render() {
-    const {isOpen} = this.state;
+    const {collapsed} = this.state;
 
     return (
-      <ScrollView
-        contentContainerStyle={styles.container}
-        ref={component => this._root = component}
-      >
+      <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.welcome}>Welcome to React Native!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <View style={styles.buttonWrapper}>
           <Button
-            onPress={() => this.setState({ isOpen: !this.state.isOpen })}
-            title={isOpen ? 'Close' : 'Open'}
+            onPress={() => this.setState({ collapsed: !this.state.collapsed })}
+            title={collapsed ? 'Open' : 'Close'}
           />
         </View>
-        <Revealer open={isOpen}>
+        <Collapse collapsed={collapsed} duration={1000}>
+          <Image
+            source={{ uri: 'https://placekitten.com/400/400' }}
+            style={styles.image}
+          />
           <Text>Hello!</Text>
-        </Revealer>
+        </Collapse>
       </ScrollView>
     );
   }
@@ -65,4 +70,8 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  image: {
+    height: 200,
+    width: 200,
+  }
 });
